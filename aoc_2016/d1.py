@@ -6,7 +6,6 @@
 #  -*- coding: utf-8 -*-
 
 # standard libs
-from enum import Enum
 import copy
 
 # 3rd party libs
@@ -16,24 +15,6 @@ import numpy as np
 
 
 directions = """R1, R3, L2, L5, L2, L1, R3, L4, R2, L2, L4, R2, L1, R1, L2, R3, L1, L4, R2, L5, R3, R4, L1, R2, L1, R3, L4, R5, L4, L5, R5, L3, R2, L3, L3, R1, R3, L4, R2, R5, L4, R1, L1, L1, R5, L2, R1, L2, R188, L5, L3, R5, R1, L2, L4, R3, R5, L3, R3, R45, L4, R4, R72, R2, R3, L1, R1, L1, L1, R192, L1, L1, L1, L4, R1, L2, L5, L3, R5, L3, R3, L4, L3, R1, R4, L2, R2, R3, L5, R3, L1, R1, R4, L2, L3, R1, R3, L4, L3, L4, L2, L2, R1, R3, L5, L1, R4, R2, L4, L1, R3, R3, R1, L5, L2, R4, R4, R2, R1, R5, R5, L4, L1, R5, R3, R4, R5, R3, L1, L2, L4, R1, R4, R5, L2, L3, R4, L4, R2, L2, L4, L2, R5, R1, R4, R3, R5, L4, L4, L5, L5, R3, R4, L1, L3, R2, L2, R1, L3, L5, R5, R5, R3, L4, L2, R4, R5, R1, R4, L3"""
-
-
-
-
-def find_taxicab_distance(path):
-    """
-
-    :param path: list of directions and lengths
-    :return: taxicab distance as an int
-    """
-    distance = 0
-    heading = 0
-    for idx, e in enumerate(path):
-        if idx == 0:
-            if e[0] == 'R':
-                heading = 0
-            else:
-                heading = 180
 
 
 class Walker(object):
@@ -98,7 +79,7 @@ class Walker(object):
         else:
             return False
 
-    def crosses(self, A, B, C, D):
+    def find_crosses(self, A, B, C, D):
         """AB and CD are perpendicular segments. Determine if
         two segments cross. Endpoints are (real, imag) in C.
         :param A: endpoint of segment AB
@@ -133,5 +114,5 @@ if __name__ == '__main__':
                 if oidx <= idx:
                     if bunny.is_parallel(bunny.points[oidx], bunny.points[oidx + 1], stack[idx], stack[idx+1]):
                         continue
-                    bunny.crosses(bunny.points[oidx], bunny.points[oidx + 1], stack[idx], stack[idx+1])
+                    bunny.find_crosses(bunny.points[oidx], bunny.points[oidx + 1], stack[idx], stack[idx + 1])
 
