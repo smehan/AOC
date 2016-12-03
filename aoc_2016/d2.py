@@ -1,5 +1,15 @@
+###########################################################
+# Copyright (C) 2015-2016 Shawn Mehan <shawn dot mehan at shawnmehan dot com>
+# day 2 of AOC_2016
+###########################################################
+#
+#  -*- coding: utf-8 -*-
 
+# standard libs
 
+# 3rd party libs
+
+# application libs
 
 test_directions = ['ULL', 'RRDDD', 'LURDL', 'UUUUD']
 test_soln = '1985'
