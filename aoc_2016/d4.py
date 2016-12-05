@@ -31,7 +31,7 @@ Of the real rooms from the list above, the sum of their sector IDs is 1514.
 
 What is the sum of the sector IDs of the real rooms?"""
 
-TEST_INSTRUCTIONS = ['aaaaa-bbb-z-y-x-123[abxyz]', 'a-b-c-d-e-f-g-h-987[abcde]', 'not-a-real-room-404[oarel]', 'totally-real-room-200[decoy]']
+TEST_INSTRUCTIONS = ['aaaaa-bbb-z-y-x-123[abxyz]', 'a-b-c-d-e-f-g-h-987[abcde]', 'not-a-real-room-404[oarel]', 'totally-real-room-200[decoy]', 'totally-real-room-aa-yy-d-c-200[decoy]']
 
 
 def get_instructions():
@@ -48,13 +48,37 @@ def tokenize_string(s):
     return f, csum, sid
 
 
+def sort_freqs(f, n):
+    """Sort the frequencies into the top n elements,
+    with ties broken by alpha sort"""
+    idx = 0
+    out = collections.Counter()
+    while idx < n:
+        remove = None
+        m = 0
+        for k, v in f.items():
+            if v > m:
+                m = v
+                remove = k
+            if v == m and k < remove:
+                # tie, so take first k
+                m = v
+                remove = k
+        out.update({remove: m})
+        f.pop(remove)
+        n -= 1
+    return out
+
+
 def compare_checksum(f, csum):
     """using Counter collection objects to determine frequencies of string,
     then takes the intersection of the string and the checksum to find
     everything in common. If this is equal to the csum collection, return True.
-    This may fail since still not taking the top 5 of the string..."""
+    string Counter object is now sorted in sort_freqs to account for ties"""
     csum_f = collections.Counter(csum)
+    f = sort_freqs(f, 5)
     if f & csum_f == csum_f:
+        print(f & csum_f)
         return True
     else:
         return False
@@ -64,7 +88,7 @@ if __name__ == '__main__':
     instructions = get_instructions()
     test_instructions = TEST_INSTRUCTIONS
     out = 0
-    for r in instructions:
+    for r in test_instructions:
         freq, checksum, sector_id = tokenize_string(r)
         if compare_checksum(freq, checksum):
             out += int(sector_id)
