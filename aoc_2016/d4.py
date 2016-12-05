@@ -73,7 +73,7 @@ def compare_checksum(f, csum):
 
 
 if __name__ == '__main__':
-    instructions = TEST_INSTRUCTIONS
+    instructions = get_instructions()
     out = 0
     idx = 0
     for r in instructions:
