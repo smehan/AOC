@@ -82,7 +82,7 @@ if __name__ == '__main__':
             out += int(sector_id)
             idx += 1
 
-    print("Total sum of {} valid room sector_ids output is {}. Processed {} codes".format(idx, out, len(instructions)))
+    print("Total of {} valid room sector_ids sum to {}. Processed {} codes...".format(idx, out, len(instructions)))
 
 
 
