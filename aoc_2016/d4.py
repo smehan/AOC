@@ -17,21 +17,11 @@ import numpy as np
 """A room is real (not a decoy) if the checksum is the five most common letters in the encrypted name, in order,
 with ties broken by alphabetization. For example:
 
-aaaaa-bbb-z-y-x-123[abxyz] is a real room because the most common letters are a (5), b (3), and then a
-tie between x, y, and z, which are listed alphabetically.
+Of the real rooms from the list below, the sum of their sector IDs is 1514."""
 
-a-b-c-d-e-f-g-h-987[abcde] is a real room because although the letters are all tied (1 of each),
-the first five are listed alphabetically.
-
-not-a-real-room-404[oarel] is a real room.
-
-totally-real-room-200[decoy] is not.
-
-Of the real rooms from the list above, the sum of their sector IDs is 1514.
-
-What is the sum of the sector IDs of the real rooms?"""
-
-TEST_INSTRUCTIONS = ['aaaaa-bbb-z-y-x-123[abxyz]', 'a-b-c-d-e-f-g-h-987[abcde]', 'not-a-real-room-404[oarel]', 'totally-real-room-200[decoy]', 'totally-real-room-aa-yy-d-c-200[decoy]']
+TEST_INSTRUCTIONS = ['aaaaa-bbb-z-y-x-123[abxyz]', 'a-b-c-d-e-f-g-h-987[abcde]', 'not-a-real-room-404[oarel]',
+                     'totally-real-room-200[decoy]', 'totally-real-room-aa-yy-d-c-200[decoy]',
+                     'a-b-c-d-e-f-g-h-987[agcde]']
 
 
 def get_instructions():
@@ -76,15 +66,14 @@ def compare_checksum(f, csum):
     everything in common. If this is equal to the csum collection, return True.
     string Counter object is now sorted in sort_freqs to account for ties"""
     csum_f = collections.Counter(csum)
-    f = sort_freqs(f, 5)
-    if f & csum_f == csum_f:
+    if sort_freqs(f, 5) & csum_f == csum_f:
         return True
     else:
         return False
 
 
 if __name__ == '__main__':
-    instructions = get_instructions()
+    instructions = TEST_INSTRUCTIONS
     out = 0
     idx = 0
     for r in instructions:
