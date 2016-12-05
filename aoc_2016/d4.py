@@ -49,8 +49,10 @@ def tokenize_string(s):
 
 
 def compare_checksum(f, csum):
-    """compare the freq values of first five keys to csum elements"""
-    print('Hey, ', f.items(), f.most_common(5))
+    """using Counter collection objects to determine frequencies of string,
+    then takes the intersection of the string and the checksum to find
+    everything in common. If this is equal to the csum collection, return True.
+    This may fail since still not taking the top 5 of the string..."""
     csum_f = collections.Counter(csum)
     if f & csum_f == csum_f:
         return True
@@ -62,7 +64,7 @@ if __name__ == '__main__':
     instructions = get_instructions()
     test_instructions = TEST_INSTRUCTIONS
     out = 0
-    for r in test_instructions:
+    for r in instructions:
         freq, checksum, sector_id = tokenize_string(r)
         if compare_checksum(freq, checksum):
             out += int(sector_id)
