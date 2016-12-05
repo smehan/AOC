@@ -54,18 +54,18 @@ def sort_freqs(f, n):
     idx = 0
     out = collections.Counter()
     while idx < n:
-        remove = None
+        remove_k = None
         m = 0
         for k, v in f.items():
             if v > m:
                 m = v
-                remove = k
-            if v == m and k < remove:
-                # tie, so take first k
+                remove_k = k
+            if v == m and k < remove_k:
+                # tie and k is alpha less than tied key
                 m = v
-                remove = k
-        out.update({remove: m})
-        f.pop(remove)
+                remove_k = k
+        out.update({remove_k: m})
+        f.pop(remove_k)
         n -= 1
     return out
 
@@ -78,7 +78,6 @@ def compare_checksum(f, csum):
     csum_f = collections.Counter(csum)
     f = sort_freqs(f, 5)
     if f & csum_f == csum_f:
-        print(f & csum_f)
         return True
     else:
         return False
@@ -86,14 +85,15 @@ def compare_checksum(f, csum):
 
 if __name__ == '__main__':
     instructions = get_instructions()
-    test_instructions = TEST_INSTRUCTIONS
     out = 0
-    for r in test_instructions:
+    idx = 0
+    for r in instructions:
         freq, checksum, sector_id = tokenize_string(r)
         if compare_checksum(freq, checksum):
             out += int(sector_id)
+            idx += 1
 
-    print("Total sector_id output is {}".format(out))
+    print("Total sum of {} valid room sector_ids output is {}. Processed {} codes".format(idx, out, len(instructions)))
 
 
 
