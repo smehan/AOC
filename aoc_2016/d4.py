@@ -7,6 +7,7 @@
 
 # standard libs
 import collections
+import string
 
 # 3rd party libs
 import numpy as np
@@ -35,7 +36,8 @@ def tokenize_string(s):
     units = front.split('-')
     sid = units[-1]
     f = collections.Counter((c for u in units[:-1] for c in u))
-    return f, csum, sid
+    room_code = [w for w in units[:-1]]
+    return f, csum, sid, room_code
 
 
 def sort_freqs(f, n):
@@ -72,15 +74,36 @@ def compare_checksum(f, csum):
         return False
 
 
+def shift_decrypt(word_list, n):
+    """takes a list of strings and rotates each letter in each word by n.
+    Checks to see if any of the decoded room names have North in them,
+    and prints those and their ids."""
+    # chars lie between (97, 122)
+    shift_by = n % 26
+    LETTERS = list(string.ascii_lowercase)
+    out = ''
+    for w in word_list:
+        word = []
+        for c in w:
+            if LETTERS.index(c) + shift_by < 26:
+                word.append(LETTERS[LETTERS.index(c) + shift_by])
+            else:
+                word.append(LETTERS[LETTERS.index(c) + shift_by - len(LETTERS)])
+        out += ''.join(word) + ' '
+    if 'north' in out:
+        print('{} in room {}'.format(out.strip(), n))
+
+
 if __name__ == '__main__':
     instructions = get_instructions()
     out = 0
     idx = 0
     for r in instructions:
-        freq, checksum, sector_id = tokenize_string(r)
+        freq, checksum, sector_id, room_code = tokenize_string(r)
         if compare_checksum(freq, checksum):
             out += int(sector_id)
             idx += 1
+        shift_decrypt(room_code, int(sector_id))
 
     print("Total of {} valid room sector_ids sum to {}. Processed {} codes...".format(idx, out, len(instructions)))
 
