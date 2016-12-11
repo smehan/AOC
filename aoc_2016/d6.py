@@ -67,6 +67,7 @@ def get_message(data, kind='most_common'):
     Given a dictionary of {col: [e1, e2, ...], ...}, computes a Counter
     object for each column, and then outputs the most_common element in each col.
     :param data: {col: [e1, e2, ...], ...}
+    :param kind: string determining whether we seek the most or least repeated element.
     :return:
     """
     if kind == 'most_common':
