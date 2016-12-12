@@ -57,7 +57,6 @@ def create_rect(screen, s):
     """
     m = re.search(r'(\d+)x(\d+)', s)
     a, b = int(m.group(2)), int(m.group(1))
-    print('{} x {}'.format(a, b))
     for i in range(a):
         for j in range(b):
             screen[i, j] = 1
@@ -68,9 +67,36 @@ def rotate_row(screen, s):
     """
     Given a row and shift distance in s, update screen to reflect new state
     :param screen:
-    :param s:
+    :param s: gives a row number y=NUM and a distance: rotate row y=0 by 4
     :return:
     """
+    m = re.search(r'(\d+) by (\d+)', s)
+    row, dist = int(m.group(1)), int(m.group(2))
+    new_screen = screen.copy()
+    for j in range(screen.shape[1]):
+        if j + dist < screen.shape[1]:
+            new_screen[row, j + dist] = screen[row, j]
+        else:
+            new_screen[row, j + dist - screen.shape[1]] = screen[row, j]
+    return new_screen
+
+
+def rotate_col(screen, s):
+    """
+    Given a col and shift distance in s, update screen to reflect new state
+    :param screen:
+    :param s: gives a col number x=NUM and a distance: rotate column x=0 by 4
+    :return:
+    """
+    m = re.search(r'(\d+) by (\d+)', s)
+    col, dist = int(m.group(1)), int(m.group(2))
+    new_screen = screen.copy()
+    for i in range(screen.shape[0]):
+        if i + dist < screen.shape[0]:
+            new_screen[i + dist, col] = screen[i, col]
+        else:
+            new_screen[i + dist - screen.shape[0], col] = screen[i, col]
+    return new_screen
 
 
 def update_screen(screen, instruction):
@@ -83,6 +109,10 @@ def update_screen(screen, instruction):
     print(instruction)
     if 'rect' in instruction:
         screen = create_rect(screen, instruction)
+    elif 'row' in instruction:
+        screen = rotate_row(screen, instruction)
+    elif 'column' in instruction:
+        screen = rotate_col(screen, instruction)
     return screen
 
 
@@ -96,7 +126,7 @@ def count_on(screen):
 
 
 if __name__ == '__main__':
-    test = True
+    test = False
     scr = make_screen(test)
     instructions = get_instructions(test)
     for r in instructions:
