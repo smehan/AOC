@@ -125,6 +125,15 @@ def count_on(screen):
     return sum(e for e in screen.flat)
 
 
+def print_letters(screen):
+    """
+    Takes in screen and prints out sections to view. Letters are 6x5
+    :param screen:
+    :return:
+    """
+    for section in range(round(screen.shape[1] / 5)):
+        print(screen[:, section*5:section*5 + 5])
+
 if __name__ == '__main__':
     test = False
     scr = make_screen(test)
@@ -133,3 +142,4 @@ if __name__ == '__main__':
         scr = update_screen(scr, r)
     print('Total pixels turned on is {}'.format(count_on(scr)))
     print(scr)
+    print_letters(scr)
