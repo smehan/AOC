@@ -22,19 +22,22 @@ X(8x2)(3x3)ABCY becomes X(3x3)ABC(3x3)ABCY (for a decompressed length of 18), be
 
 TEST_FILE = """A(1x5)BC(3x3)XYZA(2x2)BCD(2x2)EFG(6x1)(1x3)AX(8x2)(3x3)ABCY"""
 
+TEST_FILE_2 = """(27x12)(20x12)(13x14)(7x10)(1x12)A(25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN"""
+
 TEST_OUTPUT = """ABBBBBCXYZXYZXYZABCBCDEFEFG(1x3)AX(3x3)ABC(3x3)ABCY"""
 
 
 def get_data(test=False):
     """
-    read in the set of compressed data and return as a list
+    read in the set of compressed data and return as a list.
+    Hard code for test_file 1 or 2.
     :param test: determines whether to use test data or full set
     :return: list of data
     """
     if not test:
         return open('d9.data').readline().strip()
     else:
-        return TEST_FILE
+        return TEST_FILE_2
 
 
 def get_markers(s):
@@ -78,8 +81,9 @@ def multiply_markers(full_list):
     for idx, tup in enumerate(full_list):
         if idx == 0:
             out = [full_list[idx]]
-        if idx > 0 and full_list[idx][2] > (full_list[idx-1][3] + full_list[idx-1][0] - 1):
+        if idx > 0 and full_list[idx][3] < (full_list[idx-1][3] + full_list[idx-1][0] - 1):
             print(full_list)
+
 
 def marker_starts(markers):
     return (pos[2] for pos in markers)
@@ -122,7 +126,7 @@ def decompress_stream(s):
     return new_stream
 
 if __name__ == '__main__':
-    print('Decompressed stream has length {}'.format(len(decompress_stream(get_data()))))
-    # print('Test output: {}'.format(len(TEST_OUTPUT)))
-    # print(TEST_OUTPUT)
+    print('Decompressed stream has length {}'.format(len(decompress_stream(get_data(test=True)))))
+    print('Test output: {}'.format(len(TEST_OUTPUT)))
+    print(TEST_OUTPUT)
 
