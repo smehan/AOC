@@ -48,13 +48,38 @@ def get_markers(s):
     markers = []
     for m in re.finditer(pattern, s):
         markers.append((int(m.group(1)), int(m.group(2)), m.span()[0], m.span()[1]))
-    for idx, tup in enumerate(markers):
+    multiply_markers(markers)
+    return winnow_markers(markers)
+
+
+def winnow_markers(full_list):
+    """
+    Removes subsequent compression markers if they are still within the length of the first valid
+    marker.
+    :param full_list:
+    :return:
+    """
+    for idx, tup in enumerate(full_list):
         if idx == 0:
-            out = [markers[idx]]
-        if idx > 0 and markers[idx][2] > (markers[idx-1][3] + markers[idx-1][0] - 1):
-            out.append(markers[idx])
+            out = [full_list[idx]]
+        if idx > 0 and full_list[idx][2] > (full_list[idx-1][3] + full_list[idx-1][0] - 1):
+            out.append(full_list[idx])
     return out
 
+
+def multiply_markers(full_list):
+    """
+    Version 2 multiplies all of the subsequent compressions markers, e.g. (8x2)(3x3) = (3x(2*3))
+    (27x12)(20x12)(13x14)(7x10)(1x12)A = A repeated 241920 times.
+    (25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN becomes 445 characters long
+    :param s:
+    :return:
+    """
+    for idx, tup in enumerate(full_list):
+        if idx == 0:
+            out = [full_list[idx]]
+        if idx > 0 and full_list[idx][2] > (full_list[idx-1][3] + full_list[idx-1][0] - 1):
+            print(full_list)
 
 def marker_starts(markers):
     return (pos[2] for pos in markers)
