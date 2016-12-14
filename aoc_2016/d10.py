@@ -6,7 +6,7 @@
 #  -*- coding: utf-8 -*-
 
 # standard libs
-from re import compile
+import re
 from operator import mul
 from functools import reduce
 from itertools import tee, filterfalse, chain
@@ -36,8 +36,8 @@ In this configuration, bot number 2 is responsible for comparing value-5 microch
 """
 
 
-value_regex = compile('value (\d+) goes to (bot \d+)')
-botcmd_regex = compile('(bot \d+) gives low to ((?:output|bot) \d+) and high to ((?:output|bot) \d+)')
+value_regex = re.compile('value (\d+) goes to (bot \d+)')
+botcmd_regex = re.compile('(bot \d+) gives low to ((?:output|bot) \d+) and high to ((?:output|bot) \d+)')
 
 
 def get_data(test=False):
