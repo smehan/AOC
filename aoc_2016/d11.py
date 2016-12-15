@@ -115,7 +115,8 @@ def solver(initial_layout):
             state.floor[idx] -= 1
             # keeping count of state nodes searched ...
             node_count += 2
-            # shift index by 1 and look at adjoining component ...
+
+            # shift index by 1 and permute adjoining component ...
             for jdx in range(idx + 1, len(state.floor)):
                 # again, skip if not with elevator
                 if state.floor[jdx] != state.elevator:
@@ -140,4 +141,4 @@ def solver(initial_layout):
 
 
 if __name__ == '__main__':
-    solver(layout_2)
+    solver(test_layout)
