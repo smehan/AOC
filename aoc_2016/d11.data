@@ -3,10 +3,10 @@ The second floor contains a cobalt generator, a curium generator, a ruthenium ge
 The third floor contains a cobalt-compatible microchip, a curium-compatible microchip, a ruthenium-compatible microchip, and a plutonium-compatible microchip.
 The fourth floor contains nothing relevant.
 
-F4 . PG PM .  .  .  .  .  .  .  .
-F3 . .  .  BG .  CG .  RG .  PG .
-F2 . .  .  .  BM .  CM .  RM .  PM
-F1 E .  .  .  .  .  .  .  .  .  .
+F4 . .  .   .  .  .  .  .  .  .  .
+F3 . .  .   .  BM .  CM .  RM .  PM
+F2 . .  .   BG .  CG .  RG .  PG .
+F1 E PG PM  .  .  .  .  .  .  .  .
 
 Test Data
 

@@ -18,9 +18,14 @@ import numpy as np
 ########################
 
 test_components = ['HG', 'HM', 'LiG', 'LiM']
-components = ['prg', 'prm', 'cog', 'com', 'rug', 'rum', 'plg', 'plm', 'cug', 'cum']
-
 test_layout = [2, 1, 3, 1]
+
+components = ['prg', 'prm', 'cog', 'com', 'rug', 'rum', 'plg', 'plm', 'cug', 'cum']
+layout = [1, 1, 2, 3, 2, 3, 2, 3, 2, 3]
+
+components_2 = components + ['elg', 'elm', 'dig', 'dim']
+layout_2 = layout + [1, 1, 1, 1]
+
 State = namedtuple('State', ['floor', 'elevator', 'step', 'parent'])
 
 
@@ -122,17 +127,17 @@ def solver(initial_layout):
                                       state.step + 1,
                                       state))
                 state.floor[jdx] += 2
-                state.floor[jdx] += 2
+                state.floor[idx] += 2
                 solver_q.append(State(list(state.floor),
                                       state.elevator + 1,
                                       state.step + 1,
                                       state))
                 state.floor[jdx] -= 1
-                state.floor[jdx] -= 1
+                state.floor[idx] -= 1
                 node_count += 2
     else:
         print("No solution found...exiting")
 
 
 if __name__ == '__main__':
-    solver(test_layout)
+    solver(layout_2)
