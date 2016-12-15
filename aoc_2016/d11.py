@@ -17,16 +17,17 @@ import numpy as np
 # initialization
 ########################
 
-test_components = []
+test_components = ['HG', 'HM', 'LiG', 'LiM']
 components = ['prg', 'prm', 'cog', 'com', 'rug', 'rum', 'plg', 'plm', 'cug', 'cum']
 
 test_layout = [2, 1, 3, 1]
 State = namedtuple('State', ['floor', 'elevator', 'step', 'parent'])
 
 
-def expand(state):
+def summarize(state):
     """
-    expand possible nodes from current node.
+    Counts how many generators and microchips are on each floor.
+
     :param state:
     :return:
     """
@@ -50,6 +51,16 @@ def is_valid(state):
     :param state:
     :return: True if valid, False otherwise
     """
+    if not 1 <= state.elevator <= 4:
+        return False
+    if any(not 1 <= i <= 4 for i in state.floor):
+        return False
+
+    for idx, v in enumerate(state.floor[1::2]):
+        idx = idx * 2 + 1
+        if v != state.floor[idx - 1] and any(v == i for i in state.floor[0::2]):
+            return False
+
     return True
 
 
@@ -64,13 +75,21 @@ def solver(initial_layout):
     solver_q.append(State(initial_layout, 1, 0, None))
     seen = set()
     node_count = 1
+
     while solver_q:
         state = solver_q.popleft()
+        if summarize(state) in seen or not is_valid(state):
+            continue
+        seen.add(summarize(state))
+
         # check to see if reached target state and exit
         if is_solved(state):
+            print('State arrived at {}'.format(state))
             print('Solution found in {} steps.'.format(state.step))
             print('{} state nodes searched ....'.format(node_count))
             return
+
+        # not solved so continue to search state-space
         for idx in range(len(state.floor)):
             i = state.floor[idx]
             if i != state.elevator:  # skip as item not in elevator
