@@ -66,6 +66,11 @@ def solver(initial_layout):
     node_count = 1
     while solver_q:
         state = solver_q.popleft()
+        # check to see if reached target state and exit
+        if is_solved(state):
+            print('Solution found in {} steps.'.format(state.step))
+            print('{} state nodes searched ....'.format(node_count))
+            return
         for idx in range(len(state.floor)):
             i = state.floor[idx]
             if i != state.elevator:  # skip as item not in elevator
