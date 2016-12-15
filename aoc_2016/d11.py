@@ -32,7 +32,7 @@ State = namedtuple('State', ['floor', 'elevator', 'step', 'parent'])
 
 def summarize(state):
     """
-    Counts how many generators and microchips are on each floor.
+    Represents how many generators and microchips are on each floor.
 
     :param state:
     :return:
