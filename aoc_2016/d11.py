@@ -21,7 +21,7 @@ test_components = []
 components = ['prg', 'prm', 'cog', 'com', 'rug', 'rum', 'plg', 'plm', 'cug', 'cum']
 
 test_layout = [2, 1, 3, 1]
-State = namedtuple('State', ['floors', 'elevator', 'step', 'parent'])
+State = namedtuple('State', ['floor', 'elevator', 'step', 'parent'])
 
 
 def expand(state):
@@ -30,8 +30,8 @@ def expand(state):
     :param state:
     :return:
     """
-    g = [sum(1 for v in state.floors[::2] if v == fn) for fn in range(1, 5)]
-    m = [sum(1 for v in state.floors[1::2] if v == fn) for fn in range(1, 5)]
+    g = [sum(1 for v in state.floor[::2] if v == fn) for fn in range(1, 5)]
+    m = [sum(1 for v in state.floor[1::2] if v == fn) for fn in range(1, 5)]
     return ''.join(map(str, g + m)) + str(state.elevator)
 
 
@@ -41,13 +41,13 @@ def is_solved(state):
     :param state: namedtuple for present state node being checked.
     :return: True if all components on 4th floor.
     """
-    return all(i == 4 for i in state.floors)
+    return all(i == 4 for i in state.floor)
 
 
-def is_valid(node):
+def is_valid(state):
     """
-    determine if present node is a valid node.
-    :param node:
+    determine if present state is a valid state.
+    :param state:
     :return: True if valid, False otherwise
     """
     return True
@@ -55,36 +55,57 @@ def is_valid(node):
 
 def solver(initial_layout):
     """
-    Drives for search of state-state space to find solutions.
-    :param initial_layout: floors for each of the components at init.
+    Drives for search of state-space to find solutions.
+    :param initial_layout: floor for each of the components at init.
     :return:
     """
     solver_q = deque()
-    # ('State', ['floors', 'elevator', 'step', 'parent'])
+    # ('State', ['floor', 'elevator', 'step', 'parent'])
     solver_q.append(State(initial_layout, 1, 0, None))
     seen = set()
     node_count = 1
     while solver_q:
         state = solver_q.popleft()
-        print(expand(state))
-        for idx in range(len(state.floors)):
-            i = state.floors[idx]
+        for idx in range(len(state.floor)):
+            i = state.floor[idx]
             if i != state.elevator:  # skip as item not in elevator
                 continue
-            state.floors[idx] -= 1
-            solver_q.append(State(list(state.floors),
+            # first go to the floor below the present
+            state.floor[idx] -= 1
+            solver_q.append(State(list(state.floor),
                                  state.elevator - 1,
                                  state.step + 1,
                                  state))
-            state.floors[idx] += 2
-            solver_q.append(State(list(state.floors),
+            # now jump to the floor above
+            state.floor[idx] += 2
+            solver_q.append(State(list(state.floor),
                                  state.elevator + 1,
                                  state.step + 1,
                                  state))
-            state.floors[idx] -= 1
-
-            node_count += 2  # added two nodes ...
-
+            # now return to the original floor
+            state.floor[idx] -= 1
+            # keeping count of state nodes searched ...
+            node_count += 2
+            # shift index by 1 and look at adjoining component ...
+            for jdx in range(idx + 1, len(state.floor)):
+                # again, skip if not with elevator
+                if state.floor[jdx] != state.elevator:
+                    continue
+                state.floor[jdx] -= 1
+                state.floor[idx] -= 1
+                solver_q.append(State(list(state.floor),
+                                      state.elevator - 1,
+                                      state.step + 1,
+                                      state))
+                state.floor[jdx] += 2
+                state.floor[jdx] += 2
+                solver_q.append(State(list(state.floor),
+                                      state.elevator + 1,
+                                      state.step + 1,
+                                      state))
+                state.floor[jdx] -= 1
+                state.floor[jdx] -= 1
+                node_count += 2
     else:
         print("No solution found...exiting")
 
