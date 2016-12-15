@@ -7,6 +7,7 @@
 
 # standard libs
 from collections import deque, namedtuple
+import time
 
 # 3rd party libs
 import numpy as np
@@ -69,10 +70,52 @@ def is_valid(state):
     return True
 
 
-def solver(initial_layout):
+def draw_state(s, names):
+    """
+    Draw present state onto screen.
+    :param s:
+    :param names: names to use for animation
+    :return:
+    """
+    print('\x1b[2J\x1b[H', end="")
+    for floor in range(4, -1, -1):
+        out = 'F{}: '.format(floor)
+        out += ' '.join(names[idx] if i == floor else '   ' for idx, i in enumerate(s.floor))
+        if floor == s.elevator:
+            out += ' [E]'
+        print(out)
+    time.sleep(0.4)
+
+
+def animate(state, version):
+    """
+    drives an ascii animation of state space search.
+    :param state:
+    :param version: which components list to use for animation
+    :return:
+    """
+    parents = []
+
+    if version == 't':
+        names = test_components
+    elif version == '1':
+        names = components
+    else:
+        names = components_2
+    while state:
+        parents.append(state)
+        state = state.parent
+    parents.reverse()
+    for p in parents:
+        draw_state(p, names)
+    print('*'*15 + '\n')
+
+
+def solver(initial_layout, version='1'):
     """
     Drives for search of state-space to find solutions.
     :param initial_layout: floor for each of the components at init.
+    :param version: three choices of version: t: test, 1: part 1, 2: part 2
     :return:
     """
     solver_q = deque()
@@ -89,7 +132,8 @@ def solver(initial_layout):
 
         # check to see if reached target state and exit
         if is_solved(state):
-            print('State arrived at {}'.format(state))
+            animate(state, version)
+            print('Search of version {} space complete.'.format(version))
             print('Solution found in {} steps.'.format(state.step))
             print('{} state nodes searched ....'.format(node_count))
             return
@@ -141,4 +185,4 @@ def solver(initial_layout):
 
 
 if __name__ == '__main__':
-    solver(test_layout)
+    solver(layout_2, version='2')
