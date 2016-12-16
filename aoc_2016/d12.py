@@ -67,7 +67,7 @@ def is_reg(v):
     :param v:
     :return: True if valid, false otherwise
     """
-    if v in ('a', 'b', 'c', 'd'):
+    if v in 'abcd':
         return True
     else:
         return False
