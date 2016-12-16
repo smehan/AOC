@@ -34,7 +34,7 @@ jnz a 2
 dec a"""
 
 
-registers = {'a': 0, 'b': 0, 'c': 0, 'd':0}
+registers = {'a': 0, 'b': 0, 'c': 1, 'd':0}
 
 cpy_regex = re.compile('cpy ((?:a|b|c|d|\d+)) ((?:a|b|c|d))')
 inc_regex = re.compile('inc ((?:a|b|c|d))')
@@ -151,7 +151,7 @@ def process_instructions(data):
             current_idx = do_dec(r, k)
         elif r.startswith('jnz'):
             current_idx = do_jnz(r, k, len(data))
-        print('Instruction {}: {}: {}'.format(k, r, registers))
+        print('{}'.format(k), end='')
     else:
         print('Final register is {}'.format(registers))
 
