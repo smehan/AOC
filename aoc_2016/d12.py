@@ -33,8 +33,6 @@ jnz a 2
 dec a"""
 
 
-registers = {'a': 0, 'b': 0, 'c': 0, 'd':0}
-
 cpy_regex = re.compile('cpy ((?:a|b|c|d|\d+)) ((?:a|b|c|d))')
 inc_regex = re.compile('inc ((?:a|b|c|d))')
 dec_regex = re.compile('dec ((?:a|b|c|d))')
@@ -152,13 +150,14 @@ def process_instructions(data):
         elif r.startswith('jnz'):
             current_idx = do_jnz(r, k, len(data))
         step += 1
-        print('{}'.format(k), end='')
-        if step % 20 == 0:
-            print('')
     else:
-        print('\n\tFinal register is {} after {} steps'.format(registers, step))
+        print('Completed after {} steps'.format(step))
 
 
 if __name__ == '__main__':
+    registers = {'a': 0, 'b': 0, 'c': 0, 'd': 0}
     process_instructions(get_data())
-
+    print('Part 1: a = {}'.format(registers['a']))
+    registers = {'a': 0, 'b': 0, 'c': 1, 'd':0}
+    process_instructions(get_data())
+    print('Part 2: a = {}'.format(registers['a']))
