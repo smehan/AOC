@@ -7,7 +7,6 @@
 
 # standard libs
 import re
-from itertools import tee, filterfalse, chain
 from collections import OrderedDict
 
 # 3rd party libs
@@ -34,7 +33,7 @@ jnz a 2
 dec a"""
 
 
-registers = {'a': 0, 'b': 0, 'c': 1, 'd':0}
+registers = {'a': 0, 'b': 0, 'c': 0, 'd':0}
 
 cpy_regex = re.compile('cpy ((?:a|b|c|d|\d+)) ((?:a|b|c|d))')
 inc_regex = re.compile('inc ((?:a|b|c|d))')
@@ -141,6 +140,7 @@ def process_instructions(data):
     :return:
     """
     current_idx = 0
+    step = 1
     while current_idx < len(data):
         k, r = current_idx, data[current_idx]
         if r.startswith('cpy'):
@@ -151,9 +151,12 @@ def process_instructions(data):
             current_idx = do_dec(r, k)
         elif r.startswith('jnz'):
             current_idx = do_jnz(r, k, len(data))
+        step += 1
         print('{}'.format(k), end='')
+        if step % 20 == 0:
+            print('')
     else:
-        print('Final register is {}'.format(registers))
+        print('\n\tFinal register is {} after {} steps'.format(registers, step))
 
 
 if __name__ == '__main__':
