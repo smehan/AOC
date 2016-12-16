@@ -112,23 +112,23 @@ def do_dec(r, k):
     return k + 1
 
 
-def do_jnz(r, idx, length):
+def do_jnz(r, k):
     """
 
     :param r:
-    :param idx:
+    :param k:
     :return:
     """
     reg, v = parse_line(r, jnz_regex)
     if is_reg(reg):
         if registers[reg[0]] == 0:
-            return idx + 1
+            return k + 1
         else:
-            return idx + int(v)
+            return k + int(v)
     elif int(reg) == 0:
-        return idx + 1
+        return k + 1
     else:
-        return idx + int(v)
+        return k + int(v)
 
 
 def process_instructions(data):
@@ -148,10 +148,10 @@ def process_instructions(data):
         elif r.startswith('dec'):
             current_idx = do_dec(r, k)
         elif r.startswith('jnz'):
-            current_idx = do_jnz(r, k, len(data))
+            current_idx = do_jnz(r, k)
         step += 1
     else:
-        print('Completed after {} steps'.format(step))
+        print('Halted after {} steps.'.format(step))
 
 
 if __name__ == '__main__':
