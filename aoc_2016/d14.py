@@ -61,19 +61,14 @@ def find_first_triple(h):
         return ''
 
 
-def find_five(h, v):
+def find_five(h, c):
     """
-    Search hash h for five contiguous occurences of v and return True, false otherwise.
+    Search hash h for five contiguous occurrences of c and return True, False otherwise.
     :param h:
-    :param v:
+    :param c:
     :return:
     """
-    regex = '(' + v + ')\\1{4}'
-    five_regex = re.compile(r'{}'.format(regex))
-    try:
-        return re.search(five_regex, h).group(1)
-    except AttributeError:
-        return False
+    return 5 * c in h
 
 
 if __name__ == '__main__':
