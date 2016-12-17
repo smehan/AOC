@@ -48,14 +48,16 @@ def make_hash(salt, n):
 
 def find_first_triple(h):
     """
-    Given hash h as a str, find the first triple of same character and return it as a string seq.
-    :param h:
-    :return:
+    Given hash h, find the first triple occurrence of a char.
+    :param h: str
+    :return: the character repeating or None
     """
-    triple_regex = re.compile(r'(\w)\1{2}')
-    try:
-        return re.search(triple_regex, h).group(1)
-    except AttributeError:
+    i = 0
+    while i < len(h) - 2:
+        if h[i] == h[i + 1] == h[i + 2]:
+            return h[i]
+        i += 1
+    else:
         return ''
 
 
