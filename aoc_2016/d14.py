@@ -33,15 +33,18 @@ So, using our example salt of abc, index 22728 produces the 64th key.
 TEST_SALT = 'abc'
 TARGET = 64
 SALT = 'cuanljph'
+hash_history = {}
 
 
 def make_hash(salt, n):
     """
     given a salt and an int n, build an md5 hash and return it
     :param salt:
-    :param n:
+    :param n: index to add to end of hash.
     :return:
     """
+    if n is None:
+        n = ''
     return hashlib.md5(''.join([salt, str(n)]).encode('utf-8')).hexdigest()
 
 
@@ -68,25 +71,45 @@ def find_five(h, c):
     return 5 * c in h
 
 
+def make_stretch_has(salt, n):
+    """
+    additional processing on salt+n to use result of hash to make a new
+    hash, repeatedly. Stores previously seen hashes to reduce computes.
+    :param salt:
+    :param n:
+    :return:
+    """
+    h = make_hash(salt, n)
+    if salt + n in hash_history:
+        print('Seen {}'.format(salt + n))
+        return hash_history[salt + n]
+    for _ in range(2016):
+        h = make_hash(h, None)
+    hash_history[salt + n] = h
+    return h
+
+
 def is_key(salt, idx, part=1):
     """
-
+    Given a salt and an index to combine, computes the hash,
+    finds the triple seq and then tests for five seq with same
+    char. Also uses stretch key algorithm for part 2.
     :param salt:
     :param idx:
     :param part:
     :return:
     """
     if part == 1:
-        h = make_hash(salt, idx)
-    # else:
-    #     h = stretch_key(salt, idx)
+        h = make_hash(salt, str(idx))
+    else:
+        h = make_stretch_has(salt, str(idx))
     c = find_first_triple(h)
     if c:
         for i in range(1, 1001):
             if part == 1:
                 h = make_hash(salt, str(idx + i))
-            # else:
-            #     h = stretch_key(salt, idx + i)
+            else:
+                h = make_stretch_has(salt, str(idx + i))
             if find_five(h, c):
                 return True
     return False
@@ -120,26 +143,12 @@ if __name__ == '__main__':
 
     print("Part 1: {}".format(sixty_fourth_key(SALT)))
 
-    while len(good_keys) < TARGET:
-        key = make_hash(TEST_SALT, suffix)
-        all_keys.append(key)
-        if len(all_keys) > 1000:
-            char = find_first_triple(all_keys[len(all_keys) - 1000])
-            if char is not None:
-                for i in range(999, -1, -1):
-                    if find_five(all_keys[i], char):
-                        print('Target', all_keys[len(all_keys) - 1000])
-                        good_keys.append(all_keys[len(all_keys) - 1000])
-                        break
+    print('Attempting stretch_keys ...')
+    assert not is_key(TEST_SALT, 5, 2)
+    assert is_key(TEST_SALT, 10, 2)
+    assert is_key(TEST_SALT, 22551, 2)
+    print('Now seeking main target ...')
+    print("Part 2: %s" % sixty_fourth_key(SALT, part=2))
 
-        suffix += 1
-        if suffix % 1000 == 0:
-            print('Trying hash {}: '.format(suffix))
-        if len(good_keys) > 0:
-            print(key, good_keys[len(good_keys) - 1])
-    else:
-        print('Found the {} key: {}'.format(TARGET, good_keys[len(good_keys) - 1]))
-        print(good_keys)
-        for idx, e in enumerate(good_keys):
-            print(idx, all_keys.index(e))
+
 
