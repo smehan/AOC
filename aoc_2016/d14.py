@@ -103,7 +103,7 @@ def key_generator(salt, part):
 def sixty_fourth_key(salt, part=1):
     g = key_generator(salt, part)
     for x in range(TARGET):
-        c = g.next()
+        c = next(g)
     return c
 
 
@@ -116,9 +116,9 @@ if __name__ == '__main__':
     assert not is_key(TEST_SALT, 18)
     assert is_key(TEST_SALT, 39)
     assert is_key(TEST_SALT, 92)
-    #assert sixty_fourth_key(TEST_SALT) == 22728
+    assert sixty_fourth_key(TEST_SALT) == 22728
 
-    #print("Part 1: %s" % sixty_fourth_key(SALT))
+    print("Part 1: {}".format(sixty_fourth_key(SALT)))
 
     while len(good_keys) < TARGET:
         key = make_hash(TEST_SALT, suffix)
