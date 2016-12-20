@@ -8,7 +8,6 @@
 # standard libs
 import hashlib
 from collections import deque
-import re
 
 # 3rd party libs
 import numpy as np
@@ -52,13 +51,11 @@ def find_first_triple(h):
     :param h: str
     :return: the character repeating or None
     """
-    i = 0
-    while i < len(h) - 2:
+    for i in range(len(h) - 2):
         if h[i] == h[i + 1] == h[i + 2]:
             return h[i]
-        i += 1
     else:
-        return ''
+        return None
 
 
 def find_five(h, c):
@@ -71,19 +68,66 @@ def find_five(h, c):
     return 5 * c in h
 
 
+def is_key(salt, idx, part=1):
+    """
+
+    :param salt:
+    :param idx:
+    :param part:
+    :return:
+    """
+    if part == 1:
+        h = make_hash(salt, idx)
+    # else:
+    #     h = stretch_key(salt, idx)
+    c = find_first_triple(h)
+    if c:
+        for i in range(1, 1001):
+            if part == 1:
+                h = make_hash(salt, str(idx + i))
+            # else:
+            #     h = stretch_key(salt, idx + i)
+            if find_five(h, c):
+                return True
+    return False
+
+
+def key_generator(salt, part):
+    idx = 0
+    while True:
+        if is_key(salt, idx, part):
+            yield idx
+        idx += 1
+
+
+def sixty_fourth_key(salt, part=1):
+    g = key_generator(salt, part)
+    for x in range(TARGET):
+        c = g.next()
+    return c
+
+
 if __name__ == '__main__':
     good_keys = deque()
     all_keys = []
     search_idx = 0
     suffix = 0
+
+    assert not is_key(TEST_SALT, 18)
+    assert is_key(TEST_SALT, 39)
+    assert is_key(TEST_SALT, 92)
+    #assert sixty_fourth_key(TEST_SALT) == 22728
+
+    #print("Part 1: %s" % sixty_fourth_key(SALT))
+
     while len(good_keys) < TARGET:
         key = make_hash(TEST_SALT, suffix)
         all_keys.append(key)
         if len(all_keys) > 1000:
-            triple = find_first_triple(all_keys[len(all_keys) - 1000])
-            if triple != '':
+            char = find_first_triple(all_keys[len(all_keys) - 1000])
+            if char is not None:
                 for i in range(999, -1, -1):
-                    if find_five(all_keys[i], triple):
+                    if find_five(all_keys[i], char):
                         print('Target', all_keys[len(all_keys) - 1000])
                         good_keys.append(all_keys[len(all_keys) - 1000])
                         break
