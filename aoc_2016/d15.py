@@ -6,6 +6,7 @@
 #  -*- coding: utf-8 -*-
 
 # standard libs
+import itertools
 
 # 3rd party libs
 import numpy as np
@@ -87,5 +88,31 @@ def ball_drop(discs):
         discs = update_discs(discs)
     is_solved(states)
 
+
+def parse_input(inp):
+    inp = map(lambda x: x.split(" "), inp)
+    lines = [(int(l[3]), int(l[-1][:-2])) for l in inp]
+    print(lines)
+
+
+def check_solution(setup, time):
+    return all((setup[i][1] + time + i + 1) % setup[i][0] == 0
+               for i in range(len(setup)))
+
+
+def get_first_drop_time(init):
+    for i in itertools.count():
+        if check_solution(setup, i):
+            return i
+
+
 if __name__ == '__main__':
+    assert parse_input('Disc 5 has 19 positions; at time=0, it is at position 9.') == (19, 9)
+    print('bang')
+    #assert parse_input('Disc #6 has 7 positions; at time=0, it is at position 0.') == (7, '0')
+    with open('d15.data', 'r') as fh:
+        setup = parse_input(fh.readlines())
+        print("Part 1: {}".format(get_first_drop_time(setup)))
+        setup.append((11, 0))
+        print("Part 2: {}".format(get_first_drop_time(setup)))
     ball_drop(get_data(test=True))
