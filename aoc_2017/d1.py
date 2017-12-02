@@ -52,11 +52,14 @@ For example:
 """
 
 if __name__ == '__main__':
+    DEBUG = False
     tests = [t1, t2, t3, t4]
-    for t in tests:
-        get_sum(t)
-    print(f'\nSum : {get_sum(d1)}')
+    if DEBUG:
+        for t in tests:
+            print(f'\nSum : {get_sum(t)}')
+    print(f'\nPart I Sum : {get_sum(d1)}')
     tests = [t5, t6, t7, t8, t9]
-    for t in tests:
-        get_sum(t, 'type2')
-    print(f'\nSum : {get_sum(d1, species="type2")}')
+    if DEBUG:
+        for t in tests:
+            print(f'\nSum : {get_sum(t, species="type2")}')
+    print(f'\nPart II Sum : {get_sum(d1, species="type2")}')
