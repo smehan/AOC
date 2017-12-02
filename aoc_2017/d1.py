@@ -24,6 +24,7 @@ t7 = '123425'
 t8 = '123123'
 t9 = '12131415'
 
+
 def get_sum(d, species='type1'):
     sums = 0
     l = len(d)
@@ -32,14 +33,10 @@ def get_sum(d, species='type1'):
     elif species == 'type2':
         offset = int(l/2)
     for idx, e in enumerate(d):
-        if idx+offset < l and e == d[idx+offset]:
+        if e == d[(idx+offset) % l]:
             sums += int(e)
             print(e, end='')
-        elif idx+offset >= l and e == d[idx-l+offset]:
-            sums += int(e)
-            print(e, end='')
-
-    print(f'\nSum : {sums}')
+    return sums
 
 
 """
@@ -58,8 +55,8 @@ if __name__ == '__main__':
     tests = [t1, t2, t3, t4]
     for t in tests:
         get_sum(t)
-    get_sum(d1)
+    print(f'\nSum : {get_sum(d1)}')
     tests = [t5, t6, t7, t8, t9]
     for t in tests:
         get_sum(t, 'type2')
-    get_sum(d1, species='type2')
+    print(f'\nSum : {get_sum(d1, species="type2")}')
