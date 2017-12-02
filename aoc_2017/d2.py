@@ -26,10 +26,10 @@ def process_file():
     # return [[5,1,9,5],
     #         [7,5,3],
     #         [2,4,6,8]]
-    return [[5,9,2,8],
-            [9,4,7,3],
-            [3,8,6,5]]
-    #return out
+    # return [[5,9,2,8],
+    #         [9,4,7,3],
+    #         [3,8,6,5]]
+    return out
 
 
 def diff(row):
@@ -38,12 +38,13 @@ def diff(row):
 
 
 def divs(row):
-    checked = row.pop(0)
-    while row:
-        for e in row:
-            if checked % e == 0:
-                return checked / e
-        checked = row.pop(0)
+    l = len(row)
+    for idx in range(l):
+        for j in range(l):
+            if idx == j:
+                continue
+            if row[idx] % row[j] == 0:
+                return int(row[idx] / row[j])
     return 0
 
 
@@ -55,7 +56,6 @@ def checksum(f):
 
 
 if __name__ == '__main__':
-    t1 = '5195'
     print(checksum(process_file()))
 
 
