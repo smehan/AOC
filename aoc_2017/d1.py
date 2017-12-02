@@ -18,23 +18,48 @@ t2 = '1111'
 t3 = '1234'
 t4 = '91212129'
 
+t5 = '1212'
+t6 = '1221'
+t7 = '123425'
+t8 = '123123'
+t9 = '12131415'
 
-def get_sum(d):
+def get_sum(d, species='type1'):
     sums = 0
     l = len(d)
+    if species == 'type1':
+        offset = 1
+    elif species == 'type2':
+        offset = int(l/2)
     for idx, e in enumerate(d):
-        if idx+1 < l and e == d[idx+1]:
+        if idx+offset < l and e == d[idx+offset]:
             sums += int(e)
             print(e, end='')
-        elif idx+1 == l and e == d[0]:
+        elif idx+offset >= l and e == d[idx-l+offset]:
             sums += int(e)
             print(e, end='')
 
     print(f'\nSum : {sums}')
 
 
+"""
+Now, instead of considering the next digit, it wants you to consider the digit halfway around the circular list. That is, if your list contains 10 items, only include a digit in your sum if the digit 10/2 = 5 steps forward matches it. Fortunately, your list has an even number of elements.
+
+For example:
+
+1212 produces 6: the list contains 4 items, and all four digits match the digit 2 items ahead.
+1221 produces 0, because every comparison is between a 1 and a 2.
+123425 produces 4, because both 2s match each other, but no other digit has a match.
+123123 produces 12.
+12131415 produces 4.
+"""
+
 if __name__ == '__main__':
     tests = [t1, t2, t3, t4]
     for t in tests:
         get_sum(t)
     get_sum(d1)
+    tests = [t5, t6, t7, t8, t9]
+    for t in tests:
+        get_sum(t, 'type2')
+    get_sum(d1, species='type2')
