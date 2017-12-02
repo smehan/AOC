@@ -25,17 +25,16 @@ t8 = '123123'
 t9 = '12131415'
 
 
-def get_sum(d, species='type1'):
+def get_sum(ds, species='type1'):
     sums = 0
-    l = len(d)
+    l = len(ds)
     if species == 'type1':
         offset = 1
     elif species == 'type2':
         offset = int(l/2)
-    for idx, e in enumerate(d):
-        if e == d[(idx+offset) % l]:
+    for idx, e in enumerate(ds):
+        if e == ds[(idx + offset) % l]:
             sums += int(e)
-            print(e, end='')
     return sums
 
 
