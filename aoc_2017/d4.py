@@ -38,6 +38,20 @@ def count_valid(ps):
             count += 1
     return count
 
+# alternative using sets
+import sys
+
+def soln(pwd, hashfn):
+    words = set()
+    for word in pwd.split(' '):
+        hashable = hashfn(word)
+        if hashable in words:
+            return False
+        words.add(hashable)
+    return True
+
+
+
 
 if __name__ == '__main__':
     test = ['aa bb cc dd ee',
@@ -50,3 +64,13 @@ if __name__ == '__main__':
             'oiii ioii iioi iiio']
     with open('d4.txt', 'r') as fh:
         print(count_valid(fh.readlines()))
+
+    # using sets
+    result_1, result_2 = 0, 0
+    identity = lambda x : x
+    counter_hash = lambda x: frozenset(Counter(x).items())
+    for line in sys.stdin:
+        result_1 += soln(line.strip(), identity)
+        result_2 += soln(line.strip(), counter_hash)
+
+    print('Part 1: {}, Part 2: {}'.format(result_1, result_2))
