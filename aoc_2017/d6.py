@@ -44,24 +44,32 @@ def redistribute(state: list):
     return state
 
 
-def is_solved(s: deque, goal: list):
-    if s.count(goal) > 1:
+def is_solved(s: deque, goal: list, limit=1):
+    if s.count(goal) > limit:
         return True
     return False
 
 
 def solve(s: deque):
-    new = redistribute(s[0])
+    new = redistribute(s[0][:])
     while not is_solved(s, new):
         print(f'Old state: {new}')
-        new = redistribute(new)
+        new = redistribute(new[:])
         s.appendleft(new)
         print(f'New state: {new}')
-    return len(s)
+    print(len(s)-1)
+    first_loop = len(s)-1
+    while not is_solved(s, new, 2):
+        print(f'Old state: {new}')
+        new = redistribute(new[:])
+        s.appendleft(new)
+    return len(s)-1-first_loop
+
 
 
 states = deque()
 states.appendleft([0,2,7,0])
+states.appendleft([2, 8, 8, 5, 4, 2, 3, 1, 5, 5, 1, 2, 15, 13, 5, 14])
 print(solve(states))
 
 
