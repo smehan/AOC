@@ -29,7 +29,7 @@ detected after the fifth block redistribution cycle, and so the answer in this e
 
 Given the initial block counts in your puzzle input, how many redistribution cycles must be completed before a configuration is produced that has been seen before?
 """
-
+import time
 from collections import deque
 
 
@@ -53,23 +53,22 @@ def is_solved(s: deque, goal: list, limit=1):
 def solve(s: deque):
     new = redistribute(s[0][:])
     while not is_solved(s, new):
-        print(f'Old state: {new}')
         new = redistribute(new[:])
         s.appendleft(new)
-        print(f'New state: {new}')
-    print(len(s)-1)
-    first_loop = len(s)-1
+    print(len(s))
+    first_loop = len(s)
+    print(s[0])
     while not is_solved(s, new, 2):
-        print(f'Old state: {new}')
+        print(f'\r{new}', end='', flush=True)
+        time.sleep(0.1)
         new = redistribute(new[:])
         s.appendleft(new)
-    return len(s)-1-first_loop
-
+    return len(s)-first_loop
 
 
 states = deque()
-states.appendleft([0,2,7,0])
+#states.appendleft([0,2,7,0])
 states.appendleft([2, 8, 8, 5, 4, 2, 3, 1, 5, 5, 1, 2, 15, 13, 5, 14])
-print(solve(states))
+print(f'\n{solve(states)}')
 
 
