@@ -7,13 +7,7 @@ c dec -10 if a >= 1
 c inc -20 if c == 10"""
 
 compartors = {'>': op.gt, '>=': op.ge, '<': op.lt, '<=': op.le, '==': op.eq, '!=': op.ne}
-
-
-def init_registers(input) -> defaultdict:
-    out = defaultdict(int)
-    for r in input.splitlines():
-        out[r.split(' ')[0]]
-    return out
+regs = defaultdict(int)
 
 
 def cond(args) -> bool:
@@ -40,7 +34,6 @@ def parser(s: str):
 
 if __name__ == '__main__':
     test = open('d8.txt', 'r').read()
-    regs = init_registers(test)
     tmp = float('-inf')
     for r in test.splitlines():
         parser(r)
