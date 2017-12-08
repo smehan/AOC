@@ -28,17 +28,18 @@ def parser(input: str):
 def get_weights(tree: list) -> dict:
     weights = {}
     for node in tree:
-        weights[node[0]] = int(node[1])
+        weights[node[0]] = int(node[1].replace('(','').replace(')',''))
     return weights
 
 
 def sieve(tree: list):
-    trunk_elems = []
-    for node in tree:
-        # only those nodes that have map information can be anything but the outer leaves
-        if len(node) == 2:
-            continue
-        trunk_elems.append(node)
+    trunk_elems = [node for node in tree if len(node) > 2]
+    # trunk_elems = []
+    # for node in tree:
+    #     # only those nodes that have map information can be anything but the outer leaves
+    #     if len(node) == 2:
+    #         continue
+    #     trunk_elems.append(node)
     weights = get_weights(tree)
     remaining = deepcopy(trunk_elems)
     for node in trunk_elems:
