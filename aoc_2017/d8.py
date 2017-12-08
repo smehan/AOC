@@ -10,18 +10,9 @@ comparators = {'>': op.gt, '>=': op.ge, '<': op.lt, '<=': op.le, '==': op.eq, '!
 regs = defaultdict(int)
 
 
-def cond(args) -> bool:
-    if args[1] == '>' and (regs[args[0]] > int(args[2])):
-        return True
-    elif args[1] == '>=' and (regs[args[0]] >= int(args[2])):
-        return True
-    elif args[1] == '<' and (regs[args[0]] < int(args[2])):
-        return True
-    elif args[1] == '<=' and (regs[args[0]] <= int(args[2])):
-        return True
-    elif args[1] == '==' and (regs[args[0]] == int(args[2])):
-        return True
-    elif args[1] == '!=' and (regs[args[0]] != int(args[2])):
+def cond(args: list) -> bool:
+    a, comp, b = args
+    if comparators[comp](regs[a], int(b)):
         return True
     return False
 
@@ -34,11 +25,11 @@ def parser(s: str):
 
 if __name__ == '__main__':
     test = open('d8.txt', 'r').read()
-    tmp = float('-inf')
+    overall_max = float('-inf')
     for r in test.splitlines():
         parser(r)
-        tmp = max(tmp, max(regs.values()))
-    print(max(sorted(regs.values())), tmp)
+        overall_max = max(overall_max, max(regs.values()))
+    print(max(sorted(regs.values())), overall_max)
 
 
 
@@ -60,7 +51,6 @@ You might also encounter <= (less than or equal to) or != (not equal to). Howeve
 doesn't have the bandwidth to tell you what all the registers are named, and leaves that to you to determine."""
 
 """
-
 def solve(input, mx=float('-inf'), ops=dict(inc=1, dec=-1)):
     regs = defaultdict(int)
     for r1, op, v1, _, r2, c, v2 in [l.split() for l in input.splitlines() if l]:
