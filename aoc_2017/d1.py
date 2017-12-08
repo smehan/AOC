@@ -53,12 +53,14 @@ if __name__ == '__main__':
     if DEBUG:
         for t in tests:
             print(f'\nSum : {get_sum(t)}')
-    print(f'\nPart I Sum : {get_sum(d1)}')
+    else:
+        print(f'\nPart I Sum : {get_sum(d1)}')
     tests = [t5, t6, t7, t8, t9]
     if DEBUG:
         for t in tests:
             print(f'\nSum : {get_sum(t, species="type2")}')
-    print(f'\nPart II Sum : {get_sum(d1, species="type2")}')
+    else:
+        print(f'\nPart II Sum : {get_sum(d1, species="type2")}')
 
 """
 import re
