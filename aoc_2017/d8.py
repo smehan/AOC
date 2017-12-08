@@ -41,8 +41,7 @@ if __name__ == '__main__':
     tmp = 0
     for r in test.split('\n'):
         parser(r)
-        if tmp <= max(regs.values()):
-            tmp = max(regs.values())
+        tmp = max(tmp, max(regs.values()))
     print(max(sorted(regs.values())), tmp)
 
 
