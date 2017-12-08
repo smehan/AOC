@@ -34,12 +34,6 @@ def get_weights(tree: list) -> dict:
 
 def sieve(tree: list):
     trunk_elems = [node for node in tree if len(node) > 2]
-    # trunk_elems = []
-    # for node in tree:
-    #     # only those nodes that have map information can be anything but the outer leaves
-    #     if len(node) == 2:
-    #         continue
-    #     trunk_elems.append(node)
     weights = get_weights(tree)
     remaining = deepcopy(trunk_elems)
     for node in trunk_elems:
