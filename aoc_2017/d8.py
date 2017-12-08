@@ -38,7 +38,7 @@ def parser(s: str):
 if __name__ == '__main__':
     test = open('d8.txt', 'r').read()
     regs = init_registers(test)
-    tmp = 0
+    tmp = float('-inf')
     for r in test.split('\n'):
         parser(r)
         tmp = max(tmp, max(regs.values()))
@@ -62,3 +62,18 @@ After this process, the largest value in any register is 1.
 
 You might also encounter <= (less than or equal to) or != (not equal to). However, the CPU 
 doesn't have the bandwidth to tell you what all the registers are named, and leaves that to you to determine."""
+
+"""
+import operator as op
+from collections import defaultdict
+comps = {'>': op.gt, '<': op.lt, '>=': op.ge, '<=': op.le, '!=': op.ne, '==': op.eq}
+
+def solve(input, mx=float('-inf'), ops=dict(inc=1, dec=-1)):
+    regs = defaultdict(int)
+    for r1, op, v1, _, r2, c, v2 in [l.split() for l in input.splitlines() if l]:
+        regs[r1] += ops.get(op) * int(v1) if comps[c](regs[r2], int(v2)) else 0
+        mx = max(mx, regs[r1])
+    return max(regs.values()), mx
+
+part1, part2 = solve(input)
+"""
