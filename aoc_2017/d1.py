@@ -32,10 +32,7 @@ def get_sum(ds, species='type1'):
         offset = 1
     elif species == 'type2':
         offset = int(l/2)
-    for idx, e in enumerate(ds):
-        if e == ds[(idx + offset) % l]:
-            sums += int(e)
-    return sums
+    return sum((int(e) for idx, e in enumerate(ds) if e == ds[(idx + offset) % l]))
 
 
 """
@@ -62,3 +59,18 @@ if __name__ == '__main__':
         for t in tests:
             print(f'\nSum : {get_sum(t, species="type2")}')
     print(f'\nPart II Sum : {get_sum(d1, species="type2")}')
+
+"""
+import re
+def solve_regex(captcha, n):
+    return sum(int(c) for c in re.findall(fr'(\d)(?=.{{{n-1}}}\1)', captcha+captcha[:n]))
+
+solve_regex(captcha, 1)
+solve_regex(captcha, len(captcha) // 2)
+Things used (you can read about Python's regular expression syntax here):
+re.findall function.
+(\d) matches a digit and then its twin with \1.
+(?=.{n-1}\1) matches any n-1 symbols between the previous digit and the twin, but doesn’t consume the string. This way we check every digit and don't skip any.
+PEP 498 -- Literal String Interpolation. It makes us use triple braces, the inner pair for interpolation and two outer pairs (you need to escape braces in f-strings) which boil down to a pair in the final regex string. So if n is 1, we end up with (\d)(?=.{0}\1) which matches two successive identical digits. Somebody may prefer %-format like r'(\d)(?=.{%d}\1)' % n-1, but I like f-strings more.
+This solution doesn't support n greater than len(captcha). In that case you'd better use manual iteration with (i+n) % len(captcha) on each step. It also doesn't work for infinite streams of characters.
+"""
