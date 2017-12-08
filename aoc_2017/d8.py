@@ -32,11 +32,7 @@ def cond(args) -> bool:
 def parser(s: str):
     parts = s.split(' ')
     if parts[3] == 'if' and cond(parts[4:7]):
-        print(parts)
-        if parts[1] == 'inc':
-            regs[parts[0]] += int(parts[2])
-        elif parts[1] == 'dec':
-            regs[parts[0]] -= int(parts[2])
+        regs[parts[0]] += (1 if parts[1] == 'inc' else -1) * int(parts[2])
 
 
 if __name__ == '__main__':
