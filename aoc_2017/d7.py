@@ -28,7 +28,7 @@ def parser(input: str):
 def get_weights(tree: list) -> dict:
     weights = {}
     for node in tree:
-        weights[node[0]] = int(node[1].replace('(','').replace(')',''))
+        weights[node[0]] = int(node[1].replace('(', '').replace(')', ''))
     return weights
 
 
