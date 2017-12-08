@@ -6,7 +6,7 @@ a inc 1 if b < 5
 c dec -10 if a >= 1
 c inc -20 if c == 10"""
 
-compartors = {'>': op.gt, '>=': op.ge, '<': op.lt, '<=': op.le, '==': op.eq, '!=': op.ne}
+comparators = {'>': op.gt, '>=': op.ge, '<': op.lt, '<=': op.le, '==': op.eq, '!=': op.ne}
 regs = defaultdict(int)
 
 
@@ -60,14 +60,11 @@ You might also encounter <= (less than or equal to) or != (not equal to). Howeve
 doesn't have the bandwidth to tell you what all the registers are named, and leaves that to you to determine."""
 
 """
-import operator as op
-from collections import defaultdict
-comps = {'>': op.gt, '<': op.lt, '>=': op.ge, '<=': op.le, '!=': op.ne, '==': op.eq}
 
 def solve(input, mx=float('-inf'), ops=dict(inc=1, dec=-1)):
     regs = defaultdict(int)
     for r1, op, v1, _, r2, c, v2 in [l.split() for l in input.splitlines() if l]:
-        regs[r1] += ops.get(op) * int(v1) if comps[c](regs[r2], int(v2)) else 0
+        regs[r1] += ops.get(op) * int(v1) if comparators[c](regs[r2], int(v2)) else 0
         mx = max(mx, regs[r1])
     return max(regs.values()), mx
 
