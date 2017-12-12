@@ -9,7 +9,6 @@ test = """0 <-> 2
 6 <-> 4, 5"""
 
 
-
 def build_graph(input, graph = {}):
     for row in input.splitlines():
         base, _, targets = row.split(' ', 2)
@@ -17,9 +16,9 @@ def build_graph(input, graph = {}):
     return graph
 
 
-def solve(g:dict, soln = set()):
+def solve(g: dict, soln = set()):
     if g.get('0', None):
-        soln.add(*g['0'])
+        soln.update(g['0'])
         g.pop('0', None)
         # if base == 0:
         #     soln.append(targets.split(', '))
@@ -34,8 +33,9 @@ def solve(g:dict, soln = set()):
         return g, soln
 
     print(g)
-    print(soln)
-    print([v for k, v in g.items() if k != '0'])
+    print(len(soln))
+    print(len([v for k, v in g.items() if k != '0']))
 
 
-print(solve(build_graph(test)))
+#print(solve(build_graph(test)))
+print(solve(build_graph(open('d12.txt', 'r').read())))
