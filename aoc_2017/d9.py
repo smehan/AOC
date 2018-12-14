@@ -32,7 +32,6 @@ class Solver(object):
 
     def parser(self, c):
         print(f'\r{c} - {self.records} - {self.groups}')
-        time.sleep(0.001)
         sys.stdout.flush()
         if c in self.lex.keys():
             self.lex[c]()
@@ -70,6 +69,19 @@ test = ['<>', '<random chars>', '{}', '{{{}}}', '<<<<>', '<{!>}>', '<!!>', '<!!!
 # for t in test:
 #     debug_process(t)
 debug_process(open('d9.txt', 'r').read())
+
+
+import re
+from functools import reduce
+
+def solve1(input, reducer=lambda x, b: {'{': (sum(x), x[1]+1), '}': (x[0], x[1]-1)}[b]):
+    return reduce(reducer, re.sub(r'<[^>]*>', '', re.sub(r'!.|,|\n', '', input)), (0, 1))[0]
+
+def solve2(input):
+    return sum(len(g)-2 for g in re.findall(r'<[^>]*>', re.sub(r'!.', '', input)))
+
+print(solve1(open('d9.txt', 'r').read()))
+print(solve2(open('d9.txt', 'r').read()))
 """
 Here are some self-contained pieces of garbage:
 

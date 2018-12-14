@@ -16,7 +16,7 @@ def build_graph(input, graph = {}):
     return graph
 
 
-def solve(g: dict, soln = set()):
+def solve(g: dict, soln=set()):
     if g.get('0', None):
         soln.update(g['0'])
         g.pop('0', None)
@@ -37,5 +37,35 @@ def solve(g: dict, soln = set()):
     print(len([v for k, v in g.items() if k != '0']))
 
 
+def solve2(g: dict, soln=set()):
+    if not len(g):
+        k, _ = g.popitem()
+        soln.update(g[k])
+        g.pop(k, None)
+    for e in list(soln):
+        if e in g.keys():
+            soln.update((map((lambda x: x), (g.get(e)))))
+            g.pop(e, None)
+    if set(g.keys()).intersection(soln):
+        g, soln = solve(g, soln)
+    else:
+        return g, soln
+
+
+    print(g)
+    print(len(soln))
+    print(len([v for k, v in g.items() if k != '0']))
+
+
+def solve3(input):
+    groups = {}
+    for l in input.strip().split('\n'):
+        pids = {int(p) for p in l.replace(' <->', ',').split(', ')}
+        pids.update(*(groups[p] for p in pids if p in groups))
+        groups.update({p: pids for p in pids})
+    return len(groups[0]), len({id(v) for v in groups.values()})
+
+print(solve3(open('d12.txt', 'r').read()))
+
 #print(solve(build_graph(test)))
-print(solve(build_graph(open('d12.txt', 'r').read())))
+#solve2(build_graph(open('d12.txt', 'r').read()))

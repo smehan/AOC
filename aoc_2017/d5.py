@@ -42,3 +42,16 @@ if __name__ == '__main__':
         soln.jump(part=2)
     print(f'part ii solved in {soln.steps}')
 
+
+"""
+def solve(input):
+    states, state = [], [int(l) for l in input.split()]
+    while state not in states:
+        states.append(state[:])
+        mxi, mx = max(enumerate(state), key=lambda x: x[1])
+        state[mxi] = 0
+        for j in range(mx): state[(mxi+j+1) % len(state)] += 1
+    return len(states), len(states)-states.index(state)
+
+part1, part2 = solve(input)
+"""

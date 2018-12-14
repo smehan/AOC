@@ -74,3 +74,14 @@ if __name__ == '__main__':
         result_2 += soln(line.strip(), counter_hash)
 
     print('Part 1: {}, Part 2: {}'.format(result_1, result_2))
+
+    """
+    from collections import Counter
+
+def solve(input, fn):
+    phrases = [Counter(fn(p)) for p in input.strip().split('\n')]
+    return sum(1 for p in phrases if p.most_common(1)[0][1] == 1)
+
+solve(input, lambda p: p.split())  # Part 1
+solve(input, lambda p: (''.join(sorted(w)) for w in p.split()))  # Part 2
+"""
