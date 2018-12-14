@@ -13,6 +13,8 @@ Here are other example situations:
 
 """
 
+from collections import deque
+
 
 def get_input(fname: str) -> str:
     with open(fname, "r") as f:
@@ -26,8 +28,17 @@ def prepare(s: str) -> list:
         out.append(int(e))
     return out
 
-def repeated_f(freqs: list) -> int:
-    pass
+
+def repeated_f(input: list) -> int:
+    sample = deque(map(lambda x: int(x), input))
+    freq = 0
+    previous = set()
+    while freq not in previous:
+        if len(sample) == 0:
+            sample = deque(map(lambda x: int(x), input))
+        previous.add(freq)
+        freq += sample.popleft()
+    return freq
 
 
 def cur_freq(freqs: list) -> int:
@@ -41,5 +52,6 @@ if __name__ == '__main__':
     assert cur_freq(prepare("+1, +1, -2")) == 0
     assert cur_freq(prepare("-1, -2, -3")) == -6
     print(f'freq: {cur_freq(prepare(get_input("d1.txt")))}')
+    print(repeated_f(prepare(get_input("d1.txt"))))
 
 
