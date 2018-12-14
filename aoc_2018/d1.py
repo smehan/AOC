@@ -23,10 +23,7 @@ def prepare(s: str) -> list:
 
 
 def cur_freq(freqs: list) -> int:
-    out = 0
-    for e in freqs:
-        out += e
-    return out
+    return sum(freqs)
 
 
 if __name__ == '__main__':
