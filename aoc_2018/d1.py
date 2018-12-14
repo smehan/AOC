@@ -14,12 +14,20 @@ Here are other example situations:
 """
 
 
+def get_input(fname: str) -> str:
+    with open(fname, "r") as f:
+        return ", ".join([line.strip("\n") for line in f])
+
+
 def prepare(s: str) -> list:
     s.replace("+", "")
     out = []
     for e in s.split(","):
         out.append(int(e))
     return out
+
+def repeated_f(freqs: list) -> int:
+    pass
 
 
 def cur_freq(freqs: list) -> int:
@@ -32,4 +40,6 @@ if __name__ == '__main__':
     assert cur_freq(prepare("+1, +1, +1")) == 3
     assert cur_freq(prepare("+1, +1, -2")) == 0
     assert cur_freq(prepare("-1, -2, -3")) == -6
+    print(f'freq: {cur_freq(prepare(get_input("d1.txt")))}')
+
 
